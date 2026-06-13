@@ -1,0 +1,6 @@
+{
+  "name": "Sääsovellus",
+  "description": "Minimalistinen mobile-first sääsovellus, jossa on reaaliaikaiset ennusteet, ilmanlaatu, kosteusprosentit ja animoidut ikonit.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
