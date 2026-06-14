@@ -38,38 +38,40 @@ export function SunIcon({ className = "", size = 64 }: IconProps) {
         style={{ transformOrigin: "center" }}
       />
       {/* Rays */}
-      <motion.g
-        animate={{ rotate: 360 }}
-        transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-        style={{ transformOrigin: "center" }}
-      >
-        {[...Array(8)].map((_, index) => {
-          const rotation = index * 45;
-          return (
-            <motion.rect
-              key={index}
-              x="47"
-              y="18"
-              width="6"
-              height="10"
-              rx="3"
-              fill="currentColor"
-              className="text-amber-500"
-              style={{
-                transform: `rotate(${rotation}deg)`,
-                transformOrigin: "50px 50px",
-              }}
-              animate={{ height: [10, 14, 10] }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                delay: index * 0.15,
-                ease: "easeInOut",
-              }}
-            />
-          );
-        })}
-      </motion.g>
+<motion.g
+  animate={{ rotate: 360 }}
+  transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+  style={{ transformOrigin: "center" }}
+>
+  {[...Array(8)].map((_, index) => {
+    const rotation = index * 45;
+    return (
+      <motion.rect
+        key={index}
+        x="47"
+        y="18"
+        width="6"
+        // Poistettu: height="10" (Framer Motion hoitaa tämän nyt)
+        rx="3"
+        fill="currentColor"
+        className="text-amber-500"
+        style={{
+          transform: `rotate(${rotation}deg)`,
+          transformOrigin: "50px 50px",
+        }}
+        initial={{ height: 10 }} // Määritetään alkukorkeus tässä
+        animate={{ height: [10, 14, 10] }}
+        transition={{
+          duration: 2,
+          repeat: Infinity,
+          delay: index * 0.15,
+          ease: "easeInOut",
+        }}
+      />
+    );
+  })}
+</motion.g>
+
     </svg>
   );
 }

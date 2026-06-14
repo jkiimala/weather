@@ -7,6 +7,7 @@ import { HumidityWindDetails } from "./components/HumidityWindDetails";
 import { HourlyTimeline } from "./components/HourlyTimeline";
 import { LocationSearch } from "./components/LocationSearch";
 import { WeatherLoader } from "./components/WeatherLoader";
+import { WeatherAnimationBackground } from "./components/WeatherAnimationBackground";
 import { motion, AnimatePresence } from "motion/react";
 import { Lang, translations } from "./utils/i18n";
 import {
@@ -379,12 +380,14 @@ export default function App() {
                 >
                   {/* Giant Weather Core Info - Hero Card */}
                   <section 
-                    className={`md:col-span-2 lg:col-span-8 p-5 sm:p-8 rounded-3xl bg-linear-to-br ${getHeroCardGradient(weatherCode, isDayStatus)} border border-slate-800/80 shadow-2xl relative overflow-hidden flex flex-col justify-between min-h-62.5 sm:min-h-72.5 h-full transition-all`}
+                    className={`md:col-span-2 lg:col-span-8 p-6 sm:p-9 rounded-3xl bg-linear-to-br ${getHeroCardGradient(weatherCode, isDayStatus)} border border-slate-800/80 shadow-2xl relative overflow-hidden flex flex-col justify-between min-h-70 sm:min-h-80 md:min-h-95 lg:min-h-105 h-full transition-all`}
                     id="section-core-weather"
                   >
-                    
+                    {/* Dynamic atmospheric simulation layers */}
+                    <WeatherAnimationBackground code={weatherCode} isDay={isDayStatus} />
+
                     {/* Accent glow on top right */}
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-sky-500/10 rounded-full blur-3xl pointer-events-none -mr-16 -mt-16 z-0" />
+                    <div className="absolute top-0 right-0 w-80 h-80 bg-sky-500/10 rounded-full blur-3xl pointer-events-none -mr-16 -mt-16 z-0" />
                     
                     <div className="flex items-center justify-between relative z-10 w-full mb-4">
                       <div className="flex items-center gap-1.5 bg-slate-900/70 border border-slate-800/60 px-3.5 py-1.5 rounded-full backdrop-blur-md">
@@ -410,20 +413,28 @@ export default function App() {
                       </div>
                     </div>
 
-                    <div className="flex flex-col sm:flex-row items-center justify-between gap-6 mt-6 relative z-10 w-full">
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-6 mt-4 sm:mt-6 relative z-10 w-full">
                       <div className="flex flex-col items-center sm:items-start text-center sm:text-left">
-                        <div className="text-7xl font-sans font-black tracking-tighter text-slate-100 flex items-center mb-1 leading-none" id="main-temp-val">
+                        <div className="text-7xl sm:text-8xl md:text-9xl font-sans font-black tracking-tighter text-slate-100 flex items-center mb-1 leading-none" id="main-temp-val">
                           {weather.current.temperature_2m.toFixed(0)}
-                          <span className="text-4xl font-light text-slate-400 align-super ml-1">°</span>
+                          <span className="text-3xl sm:text-4xl md:text-5xl font-light text-slate-400 align-super ml-1">°</span>
                         </div>
-                        <span className="text-sm font-extrabold text-slate-300 tracking-wide font-sans mt-1">
+                        <span className="text-sm sm:text-base font-extrabold text-slate-300 tracking-wide font-sans mt-2">
                           {getWeatherDescription(weather.current.weather_code, lang)}
                         </span>
                       </div>
 
                       {/* Animated Central Weather Icon */}
                       <div className="flex justify-center p-2 transform hover:scale-105 transition-transform duration-500" id="central-icon-wrapper">
-                        {getWeatherIcon(weather.current.weather_code, isDayStatus, 100)}
+                        <div className="md:hidden">
+                          {getWeatherIcon(weather.current.weather_code, isDayStatus, 120)}
+                        </div>
+                        <div className="hidden md:block lg:hidden">
+                          {getWeatherIcon(weather.current.weather_code, isDayStatus, 210)}
+                        </div>
+                        <div className="hidden lg:block">
+                          {getWeatherIcon(weather.current.weather_code, isDayStatus, 280)}
+                        </div>
                       </div>
                     </div>
                   </section>
