@@ -7,9 +7,10 @@ import { Lang, getFinnishWeekday } from "../utils/i18n";
 interface WeeklyForecastProps {
   data: DailyWeather;
   lang: Lang;
+  currentWeatherCode?: number;
 }
 
-export function WeeklyForecast({ data, lang }: WeeklyForecastProps) {
+export function WeeklyForecast({ data, lang, currentWeatherCode }: WeeklyForecastProps) {
   const getUvLevel = (uv: number) => {
     if (uv <= 2) return { label: lang === "fi" ? "Kevyt" : "Low", color: "text-emerald-400" };
     if (uv <= 5) return { label: lang === "fi" ? "Kohtalainen" : "Moderate", color: "text-amber-400" };
@@ -39,7 +40,7 @@ export function WeeklyForecast({ data, lang }: WeeklyForecastProps) {
         {data.time.map((dayStr, index) => {
           const maxTemp = data.temperature_2m_max[index];
           const minTemp = data.temperature_2m_min[index];
-          const code = data.weather_code[index];
+          const code = (index === 0 && currentWeatherCode !== undefined) ? currentWeatherCode : data.weather_code[index];
           const uv = data.uv_index_max[index];
 
           return (

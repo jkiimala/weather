@@ -441,7 +441,7 @@ export default function App() {
 
                   {/* Weekly Forecast (md:col-span-1 lg:col-span-4 lg:row-span-2) */}
                   <section id="weekly-forecast-stats" className="md:col-span-1 lg:col-span-4 lg:row-span-2">
-                    <WeeklyForecast data={weather.daily} lang={lang} />
+                    <WeeklyForecast data={weather.daily} lang={lang} currentWeatherCode={weatherCode} />
                   </section>
 
                   {/* Bento Grid layout of Additional Stats */}
