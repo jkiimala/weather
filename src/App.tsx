@@ -16,6 +16,7 @@ import {
   Sun,
   Star,
   Info,
+  AlertTriangle,
 } from "lucide-react";
 
 // Default location (Helsinki, Finland)
@@ -86,7 +87,7 @@ export default function App() {
         const { latitude, longitude } = currentLocation;
 
         // 1. Fetch Forecast data
-        const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,wind_speed_10m&hourly=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,uv_index_max&timezone=auto`;
+        const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,wind_speed_10m&hourly=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,uv_index_max&wind_speed_unit=ms&timezone=auto`;
         const weatherRes = await fetch(weatherUrl);
         if (!weatherRes.ok) throw new Error(t.dataFetchError);
         const weatherJson = await weatherRes.json();
@@ -378,11 +379,12 @@ export default function App() {
                 >
                   {/* Giant Weather Core Info - Hero Card */}
                   <section 
-                    className={`md:col-span-2 lg:col-span-8 p-5 sm:p-8 rounded-3xl bg-linear-to-br ${getHeroCardGradient(weatherCode, isDayStatus)} border border-slate-800/80 shadow-2xl relative overflow-hidden flex flex-col justify-between min-h-72.5 sm:min-h-72.5 transition-all`}
+                    className={`md:col-span-2 lg:col-span-8 p-5 sm:p-8 rounded-3xl bg-linear-to-br ${getHeroCardGradient(weatherCode, isDayStatus)} border border-slate-800/80 shadow-2xl relative overflow-hidden flex flex-col justify-between min-h-62.5 sm:min-h-72.5 h-full transition-all`}
                     id="section-core-weather"
                   >
+                    
                     {/* Accent glow on top right */}
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-sky-500/10 rounded-full blur-3xl pointer-events-none -mr-16 -mt-16" />
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-sky-500/10 rounded-full blur-3xl pointer-events-none -mr-16 -mt-16 z-0" />
                     
                     <div className="flex items-center justify-between relative z-10 w-full mb-4">
                       <div className="flex items-center gap-1.5 bg-slate-900/70 border border-slate-800/60 px-3.5 py-1.5 rounded-full backdrop-blur-md">
@@ -432,7 +434,7 @@ export default function App() {
                   </section>
 
                   {/* Bento Grid layout of Additional Stats */}
-                  <section id="bento-grid-atmospheric-stats" className="md:col-span-1 lg:col-span-8">
+                  <section id="bento-grid-atmospheric-stats" className="md:col-span-1 lg:col-span-8 h-full">
                     <HumidityWindDetails current={weather.current} lang={lang} />
                   </section>
 
@@ -459,6 +461,16 @@ export default function App() {
                       className="text-xs text-slate-500 hover:text-sky-400 font-sans tracking-wide transition-colors duration-200 mt-0.5 cursor-pointer hover:underline"
                     >
                       {t.copyright}
+                    </a>
+                    <a
+                      href="https://jkiimala.netlify.app/#contact"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-1.5 px-3.5 py-2 text-[10px] font-bold uppercase tracking-wider rounded-xl bg-slate-900/60 hover:bg-slate-850 border border-slate-800/80 hover:border-rose-500/25 text-slate-400 hover:text-rose-400 transition-all font-sans flex items-center gap-1.5 shadow-sm"
+                      id="report-incorrect-info-link"
+                    >
+                      <AlertTriangle className="w-3.5 h-3.5 text-rose-455 animate-pulse" />
+                      <span>{t.reportIncorrect}</span>
                     </a>
                   </footer>
                 </motion.main>

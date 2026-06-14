@@ -62,7 +62,8 @@ export const translations = {
     preloaderStep3: "Synkronoidaan 24 tunnin lämpötilakuvaajia...",
     preloaderStep4: "Renderöidään käyttöliittymää...",
     preloaderStep5: "Säätiedot ladattu onnistuneesti!",
-    statusLabel: "Tietoliikennetila",
+    statusLabel: "Downloading...",
+    reportIncorrect: "Ilmoita virheellisistä tiedoista",
   },
   en: {
     title: "Weather & Air OS",
@@ -126,6 +127,7 @@ export const translations = {
     preloaderStep4: "Rendering user dashboard...",
     preloaderStep5: "Atmospheric data retrieved successfully!",
     statusLabel: "Network Status",
+    reportIncorrect: "Report incorrect details",
   },
 };
 
