@@ -2,7 +2,7 @@ export type Lang = "fi" | "en";
 
 export const translations = {
   fi: {
-    title: "Sää & Ilma OS",
+    title: "Sää & Ilma info",
     subtitle: "Pinnanlaatu & Ilmakehäseuranta v2.2",
     locate: "Paikanna",
     refresh: "Päivitä sää",
@@ -66,7 +66,7 @@ export const translations = {
     reportIncorrect: "Ilmoita virheellisistä tiedoista",
   },
   en: {
-    title: "Weather & Air OS",
+    title: "Weather & Air info",
     subtitle: "Surface & Atmospheric Monitoring v2.2",
     locate: "Locate me",
     refresh: "Refresh",
