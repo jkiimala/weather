@@ -304,7 +304,10 @@ export function SunMoonCycle({
                 style={{
                   top: `${star.top}%`,
                   left: `${star.left}%`,
-                  animation: `blink ${2 + Math.random() * 2.5}s infinite ease-in-out`,
+                  animationName: "blink",
+                  animationDuration: `${2 + Math.random() * 2.5}s`,
+                  animationIterationCount: "infinite",
+                  animationTimingFunction: "ease-in-out",
                   animationDelay: `${star.delay}s`
                 }}
               />

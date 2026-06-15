@@ -9,6 +9,7 @@ import { LocationSearch } from "./components/LocationSearch";
 import { WeatherLoader } from "./components/WeatherLoader";
 import { WeatherAnimationBackground } from "./components/WeatherAnimationBackground";
 import { SunMoonCycle } from "./components/SunMoonCycle";
+import { LocalTimeTicker } from "./components/LocalTimeTicker";
 import { motion, AnimatePresence } from "motion/react";
 import { Lang, translations } from "./utils/i18n";
 import {
@@ -19,6 +20,7 @@ import {
   Star,
   Info,
   AlertTriangle,
+  Clock,
 } from "lucide-react";
 
 // Default location (Helsinki, Finland)
@@ -107,6 +109,7 @@ export default function App() {
             daily: weatherJson.daily,
             airQuality: aqJson.current,
             location: currentLocation,
+            timezone: weatherJson.timezone,
           });
           // Save last viewed location to local storage
           localStorage.setItem("last_location", JSON.stringify(currentLocation));
@@ -426,10 +429,11 @@ export default function App() {
                       </div>
 
                       {/* Animated Central Weather Icon */}
-                      <div className="flex justify-center p-2 transform hover:scale-105 transition-transform duration-500" id="central-icon-wrapper">
+                      <div className="flex flex-col items-center justify-center p-2 transform hover:scale-105 transition-transform duration-500" id="central-icon-wrapper">
                         <div className="w-31.25 h-31.25 md:w-52.5 md:h-52.5 lg:w-65 lg:h-65 flex items-center justify-center">
                           {getWeatherIcon(weather.current.weather_code, isDayStatus, "100%")}
                         </div>
+                        <LocalTimeTicker timezone={weather.timezone} fallbackTime={weather.current.time} lang={lang} />
                       </div>
                     </div>
                   </section>

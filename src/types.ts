@@ -46,4 +46,5 @@ export interface WeatherData {
   daily: DailyWeather;
   airQuality: AirQuality;
   location: Location;
+  timezone?: string;
 }
