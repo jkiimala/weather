@@ -30,6 +30,8 @@ export interface DailyWeather {
   temperature_2m_max: number[];
   temperature_2m_min: number[];
   uv_index_max: number[];
+  sunrise: string[];
+  sunset: string[];
 }
 
 export interface AirQuality {

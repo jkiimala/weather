@@ -8,6 +8,7 @@ import { HourlyTimeline } from "./components/HourlyTimeline";
 import { LocationSearch } from "./components/LocationSearch";
 import { WeatherLoader } from "./components/WeatherLoader";
 import { WeatherAnimationBackground } from "./components/WeatherAnimationBackground";
+import { SunMoonCycle } from "./components/SunMoonCycle";
 import { motion, AnimatePresence } from "motion/react";
 import { Lang, translations } from "./utils/i18n";
 import {
@@ -88,7 +89,7 @@ export default function App() {
         const { latitude, longitude } = currentLocation;
 
         // 1. Fetch Forecast data
-        const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,wind_speed_10m&hourly=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,uv_index_max&wind_speed_unit=ms&timezone=auto`;
+        const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,wind_speed_10m&hourly=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,uv_index_max,sunrise,sunset&wind_speed_unit=ms&timezone=auto`;
         const weatherRes = await fetch(weatherUrl);
         if (!weatherRes.ok) throw new Error(t.dataFetchError);
         const weatherJson = await weatherRes.json();
@@ -426,14 +427,8 @@ export default function App() {
 
                       {/* Animated Central Weather Icon */}
                       <div className="flex justify-center p-2 transform hover:scale-105 transition-transform duration-500" id="central-icon-wrapper">
-                        <div className="md:hidden">
-                          {getWeatherIcon(weather.current.weather_code, isDayStatus, 120)}
-                        </div>
-                        <div className="hidden md:block lg:hidden">
-                          {getWeatherIcon(weather.current.weather_code, isDayStatus, 210)}
-                        </div>
-                        <div className="hidden lg:block">
-                          {getWeatherIcon(weather.current.weather_code, isDayStatus, 280)}
+                        <div className="w-31.25 h-31.25 md:w-52.5 md:h-52.5 lg:w-65 lg:h-65 flex items-center justify-center">
+                          {getWeatherIcon(weather.current.weather_code, isDayStatus, "100%")}
                         </div>
                       </div>
                     </div>
@@ -447,6 +442,17 @@ export default function App() {
                   {/* Bento Grid layout of Additional Stats */}
                   <section id="bento-grid-atmospheric-stats" className="md:col-span-1 lg:col-span-8 h-full">
                     <HumidityWindDetails current={weather.current} lang={lang} />
+                  </section>
+
+                  {/* Sun & Moon Cosmic Cycled timeline section */}
+                  <section id="cosmic-cycle-stats" className="col-span-1 md:col-span-2 lg:col-span-12">
+                    <SunMoonCycle
+                      sunriseStr={weather.daily.sunrise[0]}
+                      sunsetStr={weather.daily.sunset[0]}
+                      isDay={isDayStatus}
+                      currentLocalTime={weather.current.time}
+                      lang={lang}
+                    />
                   </section>
 
                   {/* 24-Hour Timeline */}

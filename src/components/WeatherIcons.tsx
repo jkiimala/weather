@@ -3,7 +3,7 @@ import { Lang } from "../utils/i18n";
 
 interface IconProps {
   className?: string;
-  size?: number;
+  size?: number | string;
 }
 
 export function SunIcon({ className = "", size = 64 }: IconProps) {
@@ -38,40 +38,44 @@ export function SunIcon({ className = "", size = 64 }: IconProps) {
         style={{ transformOrigin: "center" }}
       />
       {/* Rays */}
-<motion.g
-  animate={{ rotate: 360 }}
-  transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-  style={{ transformOrigin: "center" }}
->
-  {[...Array(8)].map((_, index) => {
-    const rotation = index * 45;
-    return (
-      <motion.rect
-        key={index}
-        x="47"
-        y="18"
-        width="6"
-        // Poistettu: height="10" (Framer Motion hoitaa tämän nyt)
-        rx="3"
-        fill="currentColor"
-        className="text-amber-500"
-        style={{
-          transform: `rotate(${rotation}deg)`,
-          transformOrigin: "50px 50px",
-        }}
-        initial={{ height: 10 }} // Määritetään alkukorkeus tässä
-        animate={{ height: [10, 14, 10] }}
-        transition={{
-          duration: 2,
-          repeat: Infinity,
-          delay: index * 0.15,
-          ease: "easeInOut",
-        }}
-      />
-    );
-  })}
-</motion.g>
-
+      <motion.g
+        animate={{ rotate: 360 }}
+        transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+        style={{ transformOrigin: "center" }}
+      >
+        {[...Array(8)].map((_, index) => {
+          const rotation = index * 45;
+          return (
+            <motion.rect
+              key={index}
+              x="47"
+              y="18"
+              width="6"
+              // 💡 KORJAUS 1: Luetaan korkeus CSS-muuttujasta inline-tyylinä,
+              // jolloin attribuutti on aina selaimelle validi arvo eikä undefined.
+              height="var(--ray-height, 10px)"
+              rx="3"
+              fill="currentColor"
+              className="text-amber-500"
+              style={{
+                transform: `rotate(${rotation}deg)`,
+                transformOrigin: "50px 50px",
+              }}
+              // 💡 KORJAUS 2: Animoidaan itse CSS-muuttujaa.
+              // TypeScript hyväksyy minkä tahansa "--" alkavan merkkijonon tyyliksi.
+              animate={{
+                "--ray-height": ["10px", "14px", "10px"],
+              } as any} // 'as any' poistaa TS-valitukset, jos linteri on erittäin tiukka
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                delay: index * 0.15,
+                ease: "easeInOut",
+              }}
+            />
+          );
+        })}
+      </motion.g>
     </svg>
   );
 }
@@ -426,14 +430,259 @@ export function WindIcon({ className = "", size = 64 }: IconProps) {
   );
 }
 
-export function getWeatherIcon(code: number, isDay: boolean = true, size = 64) {
+export function MoonIcon({ className = "", size = 64 }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 100 100"
+      className={className}
+      id="icon-moon"
+    >
+      <defs>
+        <radialGradient id="moonGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#818CF8" stopOpacity="0.4" />
+          <stop offset="40%" stopColor="#4F46E5" stopOpacity="0.15" />
+          <stop offset="100%" stopColor="#4F46E5" stopOpacity="0" />
+        </radialGradient>
+        <linearGradient id="moonBody" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#FFFDF0" />
+          <stop offset="40%" stopColor="#FEF08A" />
+          <stop offset="100%" stopColor="#F59E0B" />
+        </linearGradient>
+      </defs>
+
+      {/* Atmospheric Moon Aura Glow */}
+      <motion.circle
+        cx="50"
+        cy="50"
+        r="32"
+        fill="url(#moonGlow)"
+        animate={{ 
+          scale: [0.95, 1.15, 0.95],
+          opacity: [0.7, 1, 0.7]
+        }}
+        transition={{ 
+          duration: 4, 
+          repeat: Infinity, 
+          ease: "easeInOut" 
+        }}
+        style={{ transformOrigin: "center" }}
+      />
+
+      {/* Outer Golden Ripple Glow */}
+      <motion.circle
+        cx="50"
+        cy="50"
+        r="21"
+        fill="none"
+        stroke="#FEF08A"
+        strokeWidth="1.5"
+        className="opacity-20"
+        animate={{ 
+          scale: [1, 1.3, 1],
+          opacity: [0.3, 0, 0.3]
+        }}
+        transition={{ 
+          duration: 3, 
+          repeat: Infinity, 
+          ease: "easeOut" 
+        }}
+        style={{ transformOrigin: "center" }}
+      />
+
+      {/* Glowing Crescent Moon Body */}
+      <motion.g
+        style={{ transformOrigin: "50px 50px" }}
+        animate={{ 
+          rotate: [-3, 3, -3],
+          scale: [1, 1.03, 1]
+        }}
+        transition={{ 
+          duration: 6, 
+          repeat: Infinity, 
+          ease: "easeInOut" 
+        }}
+      >
+        <path
+          d="M50 24C35.6 24 24 35.6 24 50s11.6 26 26 26c3 0 5.9-.5 8.5-1.5-11.8-3.9-20.1-15-20.1-28s8.3-24.1 20.1-28c-2.6-1-5.5-1.5-8.5-1.5z"
+          fill="url(#moonBody)"
+          filter="drop-shadow(0 0 6px rgba(254,240,138,0.5))"
+        />
+      </motion.g>
+
+      {/* Magical 4-Point Star Sparkles in Sky */}
+      {/* Star 1 - Top Left */}
+      <g transform="translate(26, 24)">
+        <motion.path
+          d="M0,-5 Q0,0 5,0 Q0,0 0,5 Q0,0 -5,0 Q0,0 0,-5"
+          fill="#FFFDF0"
+          animate={{ 
+            opacity: [0.2, 0.95, 0.2],
+            scale: [0.6, 1.2, 0.6],
+            rotate: [0, 90, 180] 
+          }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.2 }}
+        />
+      </g>
+
+      {/* Star 2 - Mid Right */}
+      <g transform="translate(74, 38)">
+        <motion.path
+          d="M0,-6 Q0,0 6,0 Q0,0 0,6 Q0,0 -6,0 Q0,0 0,-6"
+          fill="#FFFDF0"
+          animate={{ 
+            opacity: [0.3, 1, 0.3],
+            scale: [0.5, 1.3, 0.5],
+            rotate: [45, 135, 225]
+          }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.8 }}
+        />
+      </g>
+
+      {/* Star 3 - Bottom Left */}
+      <g transform="translate(32, 72)">
+        <motion.path
+          d="M0,-4 Q0,0 4,0 Q0,0 0,4 Q0,0 -4,0 Q0,0 0,-4"
+          fill="#E0E7FF"
+          animate={{ 
+            opacity: [0.15, 0.8, 0.15],
+            scale: [0.7, 1.1, 0.7],
+            rotate: [-15, 75, 165]
+          }}
+          transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+        />
+      </g>
+
+      {/* Star 4 - Far Bottom Right */}
+      <g transform="translate(68, 68)">
+        <motion.path
+          d="M0,-3 Q0,0 3,0 Q0,0 0,3 Q0,0 -3,0 Q0,0 0,-3"
+          fill="#FFFDF0"
+          animate={{ 
+            opacity: [0.1, 0.9, 0.1],
+            scale: [0.5, 1, 0.5]
+          }}
+          transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+        />
+      </g>
+    </svg>
+  );
+}
+
+export function PartlyCloudyNightIcon({ className = "", size = 64 }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 100 100"
+      className={className}
+      id="icon-partly-cloudy-night"
+    >
+      <defs>
+        <radialGradient id="nightMoonGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#818CF8" stopOpacity="0.35" />
+          <stop offset="100%" stopColor="#4F46E5" stopOpacity="0" />
+        </radialGradient>
+        <linearGradient id="nightMoonBody" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#FFFDF0" />
+          <stop offset="50%" stopColor="#FEF08A" />
+          <stop offset="100%" stopColor="#EAB308" />
+        </linearGradient>
+        {/* Soft edge highlight gradient for moonlight cloud edge */}
+        <linearGradient id="cloudNightGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#475569" />
+          <stop offset="100%" stopColor="#1E293B" />
+        </linearGradient>
+      </defs>
+
+      {/* Twinkling background stars with beautiful sparkles */}
+      <g transform="translate(18, 20)">
+        <motion.path
+          d="M0,-4 Q0,0 4,0 Q0,0 0,4 Q0,0 -4,0 Q0,0 0,-4"
+          fill="#FFFDF0"
+          animate={{ opacity: [0.2, 0.9, 0.2], scale: [0.6, 1.1, 0.6] }}
+          transition={{ duration: 2.5, repeat: Infinity, delay: 0.3 }}
+        />
+      </g>
+      <g transform="translate(76, 18)">
+        <motion.path
+          d="M0,-5 Q0,0 5,0 Q0,0 0,5 Q0,0 -5,0 Q0,0 0,-5"
+          fill="#fef08a"
+          animate={{ opacity: [0.1, 0.85, 0.1], scale: [0.5, 1, 0.5], rotate: [0, 45, 90] }}
+          transition={{ duration: 3.2, repeat: Infinity, delay: 0.9 }}
+        />
+      </g>
+      <g transform="translate(85, 45)">
+        <motion.path
+          d="M0,-3 Q0,0 3,0 Q0,0 0,3 Q0,0 -3,0 Q0,0 0,-3"
+          fill="#E0E7FF"
+          animate={{ opacity: [0.3, 1, 0.3], scale: [0.6, 1.2, 0.6] }}
+          transition={{ duration: 2.1, repeat: Infinity, delay: 1.4 }}
+        />
+      </g>
+
+      {/* Moon behind Cloud Container with translated position */}
+      <g transform="translate(12, 10)">
+        {/* Soft aura glow behind peeking moon */}
+        <motion.circle
+          cx="35"
+          cy="30"
+          r="24"
+          fill="url(#nightMoonGlow)"
+          animate={{ scale: [0.9, 1.15, 0.9], opacity: [0.6, 1, 0.6] }}
+          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+        />
+
+        {/* Crescent Moon Body */}
+        <motion.g
+          style={{ transformOrigin: "35px 30px" }}
+          animate={{ 
+            rotate: [-2, 3, -2],
+            scale: [1, 1.04, 1]
+          }}
+          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <path
+            d="M35 15c-8.3 0-15 6.7-15 15s6.7 15 15 15c1.7 0 3.4-.3 4.9-.8-6.7-2.3-11.4-8.6-11.4-16s4.7-13.7 11.4-16c-1.5-.5-3.2-.8-4.9-.8z"
+            fill="url(#nightMoonBody)"
+            filter="drop-shadow(0 0 5px rgba(254,240,138,0.45))"
+          />
+        </motion.g>
+      </g>
+
+      {/* Cloud in Front */}
+      {/* Cloud Backing Shadow */}
+      <motion.path
+        d="M25,65 C25,55 33,48 43,48 C45,48 47,48.5 49,49.2 C53,43 60,39 67,39 C78,39 87,47 87,57 C87,57.5 87,58 86.9,58.5 C89.3,60.2 91,63 91,66.2 C91,71.6 86.6,76 81.2,76 L25,76 C18.9,76 14,71.1 14,65 C14,59.5 18,55 23.3,54.2 C24.4,54.1 25,54.8 25,55.9 Z"
+        fill="#0f172a"
+        className="opacity-40"
+        animate={{ y: [1.5, -1.5, 1.5], x: [-0.5, 0.5, -0.5] }}
+        transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
+      />
+
+      {/* Actual Cloud with dual-tone edge glow from moon */}
+      <motion.path
+        d="M25,65 C25,55 33,48 43,48 C45,48 47,48.5 49,49.2 C53,43 60,39 67,39 C78,39 87,47 87,57 C87,57.5 87,58 86.9,58.5 C89.3,60.2 91,63 91,66.2 C91,71.6 86.6,76 81.2,76 L25,76 C18.9,76 14,71.1 14,65 C14,59.5 18,55 23.3,54.2 C24.4,54.1 25,54.8 25,55.9 Z"
+        fill="url(#cloudNightGrad)"
+        stroke="#818CF8"
+        strokeWidth="1.2"
+        className="stroke-indigo-400/40"
+        animate={{ y: [0, -3, 0] }}
+        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+      />
+    </svg>
+  );
+}
+
+export function getWeatherIcon(code: number, isDay: boolean = true, size: number | string = 64) {
   // Map WMO codes to gorgeous vector components
   switch (code) {
     case 0: // Clear
-      return <SunIcon size={size} />;
+      return isDay ? <SunIcon size={size} /> : <MoonIcon size={size} />;
     case 1:
     case 2: // Mainly clear, partly cloudy
-      return <PartlyCloudyIcon size={size} />;
+      return isDay ? <PartlyCloudyIcon size={size} /> : <PartlyCloudyNightIcon size={size} />;
     case 3: // Overcast
       return <CloudyIcon size={size} />;
     case 45:
@@ -465,7 +714,7 @@ export function getWeatherIcon(code: number, isDay: boolean = true, size = 64) {
     case 99: // Thunderstorm
       return <StormIcon size={size} />;
     default:
-      return <PartlyCloudyIcon size={size} />;
+      return isDay ? <PartlyCloudyIcon size={size} /> : <PartlyCloudyNightIcon size={size} />;
   }
 }
 
