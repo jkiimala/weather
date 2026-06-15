@@ -505,7 +505,7 @@ export function MoonIcon({ className = "", size = 64 }: IconProps) {
         }}
       >
         <path
-          d="M50 24C35.6 24 24 35.6 24 50s11.6 26 26 26c3 0 5.9-.5 8.5-1.5-11.8-3.9-20.1-15-20.1-28s8.3-24.1 20.1-28c-2.6-1-5.5-1.5-8.5-1.5z"
+          d="M 50 24 A 26 26 0 0 0 50 76 A 31 31 0 0 1 50 24 Z"
           fill="url(#moonBody)"
           filter="drop-shadow(0 0 6px rgba(254,240,138,0.5))"
         />
@@ -644,7 +644,7 @@ export function PartlyCloudyNightIcon({ className = "", size = 64 }: IconProps) 
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
         >
           <path
-            d="M35 15c-8.3 0-15 6.7-15 15s6.7 15 15 15c1.7 0 3.4-.3 4.9-.8-6.7-2.3-11.4-8.6-11.4-16s4.7-13.7 11.4-16c-1.5-.5-3.2-.8-4.9-.8z"
+            d="M 35 15 A 15 15 0 0 0 35 45 A 18 18 0 0 1 35 15 Z"
             fill="url(#nightMoonBody)"
             filter="drop-shadow(0 0 5px rgba(254,240,138,0.45))"
           />
